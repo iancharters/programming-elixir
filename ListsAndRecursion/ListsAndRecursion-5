@@ -1,0 +1,76 @@
+#Exercise: ListsAndRecursion-5
+#Implement the following Enum functions using no library functions or
+#list comprehensions: all?, each, filter, split, and take. You may need to use an
+#if statement to implement filter. The syntax for this is
+
+defmodule E do
+  # ANY
+
+  def any?(list, func, bool \\ false)
+
+  def any?([h|t], func, bool) when bool == false do
+      any?(t, func, func.(h))
+  end
+
+  def any?([_h|_t], _func, bool) when bool == true, do: bool
+
+  def any?([], _func, bool) do
+    bool
+  end
+
+  # EACH
+  def each(list, func) do
+    each(list, func, [])
+  end
+
+  def each([h|t], func, nlist) do
+    each(t, func, nlist ++ [func.(h)])
+  end
+
+  def each([], _, nlist) do
+    nlist
+  end
+
+# Filter
+
+def filter(list, func) do
+  filter(list, func, [])
+end
+
+def filter([h|t], func, list) do
+
+  if func.(h) do
+    list = list ++ [h]
+  end
+
+  filter(t, func, list)
+end
+
+def filter([], _, list) do
+  list
+end
+
+def split(list, split), do: split(list, split, [], [])
+
+def split([h|t], split, list, front) do
+
+if(split != nil) do
+  if(h == split) do
+    front = front ++ [h]
+    split = nil
+  else
+    front = front ++ [h]
+  end
+else
+  list = list ++ [h]
+end
+
+  split(t, split, list, front)
+
+end
+
+def split([], _, list, front) do
+  {front, list}
+end
+
+end

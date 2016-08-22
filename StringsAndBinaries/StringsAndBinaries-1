@@ -1,0 +1,14 @@
+defmodule SAB1 do
+
+def printable_ascii([head | tail]) when head in 32..126 do
+printable_ascii(tail)
+end
+
+def printable_ascii([_head | _tail]), do: false
+
+def printable_ascii([]), do: true
+
+end
+
+IO.inspect SAB1.printable_ascii('this is true')
+IO.inspect SAB1.printable_ascii('thiŠ iŠ false')

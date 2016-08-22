@@ -1,0 +1,11 @@
+defmodule SAB2 do
+def anagram?(w1, w2) do
+  if (w1 -- w2 == [] && w2 -- w1 == []) do
+    true
+  else
+    false
+  end
+end
+end
+
+IO.inspect SAB2.anagram?('cheese', 'cheese')

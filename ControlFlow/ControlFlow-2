@@ -1,0 +1,10 @@
+defmodule CF3 do
+    def ok!({x, y}) do
+      case {x, y} do
+        {:ok, data} ->
+          data
+        {_, msg} ->
+        raise "Error raised: #{msg}"
+      end
+    end
+end

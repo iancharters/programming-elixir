@@ -1,0 +1,33 @@
+defmodule SAB4 do
+
+  @moduledoc """
+  Exercise: StringsAndBinaries-4
+  (Hard) Write a function that takes a single-quoted string of the form number
+  [+-*/] number and returns the result of the calculation. The indi- vidual numbers
+  do not have leading plus or minus signs.
+
+  example: calculate('123 + 27') # => 150
+  """
+
+  def calculate(str) do
+    nums = String.split(str, ["+", "-", "*", "/", " + ", " - ", " * ", " / "])
+      |> Enum.map(&(String.to_integer(&1)))
+
+    op = Regex.run(~r/\+|-|\*|\//, str)
+
+    calculate(nums, op)
+  end
+
+  def calculate([a,b], op) do
+    case op do
+      ["+"] ->
+        a + b
+      ["-"] ->
+        a - b
+      ["*"] ->
+        a * b
+      ["/"] ->
+        a / b
+    end
+  end
+end

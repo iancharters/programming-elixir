@@ -1,0 +1,31 @@
+defmodule SAB4 do
+  def calculate(input) do
+
+    str = String.split(input, ["+", "-", "*", "/", " + ", " - ", " * ", " / "])
+          |> Enum.map(&(String.to_integer(&1)))
+
+    cond do
+      input =~ ~r/\+/ ->
+        calculate(str, "+")
+      input =~ ~r/-/ ->
+        calculate(str, "-")
+      input =~ ~r/\*/ ->
+        calculate(str, "*")
+      input =~ ~r/\// ->
+        calculate(str, "/")
+    end
+  end
+
+  def calculate(list, op) do
+    cond do
+      op == "+" ->
+        List.first(list) + List.last(list)
+      op == "-" ->
+        List.first(list) - List.last(list)
+      op == "*" ->
+        List.first(list) * List.last(list)
+      op == "/" ->
+        List.first(list) / List.last(list)
+    end
+  end
+end

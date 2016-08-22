@@ -1,0 +1,28 @@
+defmodule Tax do
+
+  def orders_with_total(orders, tax_rates) do
+    orders |> Enum.map(&add_total_to(&1, tax_rates))
+  end
+
+  def add_total_to(order = [id: _, ship_to: loc, net_amount: net], tax_rates) do
+
+    state_tax = Keyword.get(tax_rates, loc, 0)
+    Keyword.put(order, :total_amount, net + (state_tax * net))
+  end
+
+  def get_data(file, array \\ {}) do
+    File.stream!(file, [:read])
+    |> Enum.map(&(List.append(array, &1)))
+
+  end
+
+end
+
+#File.open("data", [:read], fn(file) ->
+  #IO.stream(file, :line)
+  #|> IO.puts
+  #end)
+
+tax_rates =  [ NC: 0.075, TX: 0.08 ]
+
+#IO.inspect Tax.orders_with_total(orders, tax_rates)

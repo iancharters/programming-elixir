@@ -1,0 +1,54 @@
+defmodule SAB5 do
+  @moduledoc """
+  Write a function that takes a list of dqs and prints each on a separate line,
+  centered in a column that has the width of the longest string. Make sure it works
+   with UTF characters.
+
+   iex> center(["cat", "zebra", "elephant"])
+     cat
+    zebra
+   elephant
+  """
+
+  def center(input) do
+    _center(input, [], get_length(input))
+  end
+
+  defp _center([head | tail], list, len) do
+    difference = len - String.length(head)
+    padding = round(((len - String.length(head)) / 2) + String.length(head))
+
+    head = String.ljust(head, padding)
+    padding = round(padding + differe nce / 2)
+    head = String.rjust(head, padding)
+
+    #list = list ++ [head]
+    IO.puts head
+
+    _center(tail, list, len)
+  end
+
+  defp _center([], list, _) do
+    list
+  end
+
+  #Find the greatest strength length among the list
+
+  def get_length(input) do
+    _get_length(input, 0)
+  end
+
+  defp _get_length([head | tail], val) do
+    if String.length(head) > val do
+      val = String.length(head)
+    end
+
+    _get_length(tail, val)
+  end
+
+  defp _get_length([], val) do
+    val
+  end
+end
+
+IO.inspect SAB5.center(["cat", "zebra", "elephant"])
