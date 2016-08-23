@@ -3,7 +3,7 @@ defmodule CliTest do
 
   import Issues.CLI, only: [ parse_args: 1,
                              sort_into_ascending_order: 1,
-                             convert_to_list_of_hashdicts: 1 ]
+                             convert_to_maps: 1 ]
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h", "anything"]) == :help
@@ -27,6 +27,6 @@ defmodule CliTest do
   defp fake_created_at_list(values) do
     data = for value <- values,
            do: [ {"created_at", value}, {"other_data", "xxx"} ]
-    convert_to_list_of_hashdicts data
+    convert_to_maps data
   end
 end

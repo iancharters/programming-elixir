@@ -7,7 +7,7 @@ defmodule Issues.CLI do
     table of the last _n_ issues in a github project
     """
 
-  def run(argv) do
+  def main(argv) do
     argv
       |> parse_args
       |> process
@@ -45,23 +45,22 @@ defmodule Issues.CLI do
     |> convert_to_maps
     |> sort_into_ascending_order
     |> Enum.take(count)
-    |> columns
+    |> columns("number", "created_at", "title")
 
   end
 
-  def columns2(map, list \\ []) do
+  def columns2(map, c1, c2, c3, list \\ []) do
     map = List.first(map)
 
-    list = [ Map.get(map, "number"), Map.get(map, "created_at"),
-    Map.get(map, "title") ]
+    list = [ Map.get(map, c1), Map.get(map, c2), Map.get(map, c3) ]
   end
 
-  def columns(map) do
+  def columns(map, c1, c2, c3) do
     IO.puts "#    | created_at           | title
 -----+----------------------+-----------------------------------------"
 
     Enum.each(map, fn x ->
-      IO.puts "#{Map.get(x, "number")} | #{Map.get(x, "created_at")} | #{Map.get(x, "title")}"
+      IO.puts "#{Map.get(x, c1)} | #{Map.get(x, c2)} | #{Map.get(x, c3)}"
     end)
   end
 
