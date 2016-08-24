@@ -1,6 +1,8 @@
 defmodule Issues.CLI do
     @default_count 4
 
+    import Quinn
+
     @moduledoc """
     Handle the command line parsing and the dispatch to
     the various functions that end up generating a
@@ -27,6 +29,7 @@ defmodule Issues.CLI do
     { [ help: true ], _, _ }            -> :help
     { _, [ user, project, count ], _ }  -> { user, project, String.to_integer(count) }
     { _, [ user, project ], _ }         -> { user, project, @default_count }
+    {_, airport_code, _ }               -> { airport_code }
     _                                   -> :help
     end
   end
@@ -46,13 +49,84 @@ defmodule Issues.CLI do
     |> sort_into_ascending_order
     |> Enum.take(count)
     |> columns("number", "created_at", "title")
+  end
+
+@doc """
+Fetches the XML file and parses the individual fields.  Prints out the result
+in a table.
+"""
+
+  def process(airport_code) do
+
+    map = Map.new()
+    #Uses HTTPoison to request the XML page.  Quinn parses this XML and
+    #puts it into the result variable without a list.
+
+    [result | _ ] = Issues.WeatherSearch.fetch(airport_code)
+                    |> decode_response
+                    |> Quinn.parse
+
+    location = Quinn.find(result, :location)
+      |> List.first
+      |> Map.get(:value)
+
+    station_id = Quinn.find(result, :station_id)
+      |> List.first
+      |> Map.get(:value)
+
+    observation_time = Quinn.find(result, :observation_time)
+      |> List.first
+      |> Map.get(:value)
+
+    latitude = Quinn.find(result, :latitude)
+      |> List.first
+      |> Map.get(:value)
+
+    longitude = Quinn.find(result, :longitude)
+      |> List.first
+      |> Map.get(:value)
+
+    temp_c = Quinn.find(result, :temp_c)
+      |> List.first
+      |> Map.get(:value)
+
+    dewpoint_c = Quinn.find(result, :dewpoint_c)
+      |> List.first
+      |> Map.get(:value)
+
+    relative_humidity = Quinn.find(result, :relative_humidity)
+      |> List.first
+      |> Map.get(:value)
+
+    wind_mph = Quinn.find(result, :wind_mph)
+      |> List.first
+      |> Map.get(:value)
+
+    map =
+        %{  location: List.first(location),
+            station_id: List.first(station_id),
+            observation_time: List.first(observation_time),
+            latitude: List.first(latitude),
+            longitude: List.first(longitude),
+            temp_c: List.first(temp_c),
+            dewpoint_c: List.first(dewpoint_c),
+            relative_humidity: List.first(relative_humidity),
+            wind_mph: List.first(wind_mph),
+        }
+
+    weather_table(map)
 
   end
 
-  def columns2(map, c1, c2, c3, list \\ []) do
-    map = List.first(map)
-
-    list = [ Map.get(map, c1), Map.get(map, c2), Map.get(map, c3) ]
+  def weather_table(map) do
+    "Location: #{Map.get(map, :location)} (#{Map.get(map, :station_id)})\n" <>
+    "Observation time: #{Map.get(map, :observation_time)}\n" <>
+    "Lat&Long: #{Map.get(map, :latitude)} / #{Map.get(map, :longitude)}\n" <>
+    "Temperature: #{Map.get(map, :temp_c)}c\n" <>
+    "Dewpoint: #{Map.get(map, :dewpoint_c)}c\n" <>
+    "Relative Humidity: #{Map.get(map, :relative_humidity)}%\n" <>
+    "Wind (mph): #{Map.get(map, :wind_mph)}"
+    |> IO.puts
   end
 
   def columns(map, c1, c2, c3) do
