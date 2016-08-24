@@ -4,9 +4,51 @@ title
 
 Issues.CLI.run(["elixir-lang", "elixir", "1"])
 
-#  | created_at           | title
+#   | created_at           | title
 ----+----------------------+-----------------------------------------
 889 | 2013-03-16T22:03:13Z | MIX_PATH environment variable (of sorts)
 892 | 2013-03-20T19:22:07Z | Enhanced mix test --cover
 893 | 2013-03-21T06:23:00Z | mix test time reports
 898 | 2013-03-23T19:19:08Z | Add mix compile --warnings-as-errors
+
+Issues.WeatherSearch.fetch "KJDN"
+Issues.CLI.process "KJDN"
+sample link: http://w1.weather.gov/xml/current_obs/KDTO.xml
+
+Last Updated:	Aug 22 2016, 8:53 pm CDT
+Mon, 22 Aug 2016 20:53:00 -0500
+Weather:	Mostly Cloudy
+Temperature:	77.0 °F (25.0 °C)
+Dewpoint:	75.0 °F (23.9 °C)
+Relative Humidity:	94 %
+Wind:	Southeast at 6.9 MPH (6 KT)
+Visibility:	10.00 miles
+MSL Pressure:	1016.9 mb
+Altimeter:	30.05 in Hg
+
+
+   %{attr: [], name: :suggested_pickup, value: ["15 minutes after the hour"]},
+   %{attr: [], name: :suggested_pickup_period, value: ["60"]},
+   %{attr: [], name: :location, value: ["Jordan, Jordan Airport, MT"]},
+   %{attr: [], name: :station_id, value: ["KJDN"]},
+   %{attr: [], name: :latitude, value: ["47.32583"]},
+   %{attr: [], name: :longitude, value: ["-106.9475"]},
+   %{attr: [], name: :observation_time,
+     value: ["Last Updated on Aug 22 2016, 9:48 pm MDT"]},
+   %{attr: [], name: :observation_time_rfc822,
+     value: ["Mon, 22 Aug 2016 21:48:00 -0600"]},
+   %{attr: [], name: :temperature_string, value: ["74.0 F (23.3 C)"]},
+   %{attr: [], name: :temp_f, value: ["74.0"]},
+   %{attr: [], name: :temp_c, value: ["23.3"]},
+   %{attr: [], name: :relative_humidity, value: ["14"]},
+   %{attr: [], name: :wind_string, value: ["North at 16.1 MPH (14 KT)"]},
+   %{attr: [], name: :wind_dir, value: ["North"]},
+   %{attr: [], name: :wind_degrees, value: ["340"]},
+   %{attr: [], name: :wind_mph, value: ["16.1"]},
+   %{attr: [], name: :wind_kt, value: ["14"]},
+   %{attr: [], name: :pressure_string, value: ["1005.2 mb"]},
+   %{attr: [], name: :pressure_mb, value: ["1005.2"]},
+   %{attr: [], name: :pressure_in, value: ["29.74"]},
+   %{attr: [], name: :dewpoint_string, value: ["21.9 F (-5.6 C)"]},
+   %{attr: [], name: :dewpoint_f, value: ["21.9"]},
+   %{attr: [], name: :dewpoint_c, value: ["-5.6"]},
