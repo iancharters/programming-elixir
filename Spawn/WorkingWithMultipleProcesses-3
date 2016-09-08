@@ -1,0 +1,40 @@
+# Just screwing around with processes to see what works and what doesn't.
+
+defmodule Multi do
+  import :timer, only: [ sleep: 1 ]
+
+  def one(parent) do
+    send parent, {:one, "this will go"}
+    send parent, {:one, "I'm about to die"}
+    send parent, {:this_wont_go, "stuff"}
+    raise "func one"
+  end
+
+  def two(parent) do
+      Enum.each(10..1, fn(n) ->
+        send parent, {:two, n}
+      end)
+
+      raise "func two"
+  end
+
+def listener do
+  receive do
+    {:two, 1}               -> exit(:secondfunctionisdedtoo)
+    {:two, msg}             -> IO.puts "Received: #{msg}"
+    {:one, msg}             -> IO.puts "Received: #{msg}"
+  end
+
+  listener
+end
+
+  def run do
+    Process.flag(:trap_exit, true)
+
+    listen = spawn(__MODULE__, :listener, [])
+    spawn_monitor(__MODULE__, :one, [listen])
+    spawn_link(__MODULE__, :two, [listen])
+
+    sleep(500)
+  end
+end
