@@ -18,17 +18,21 @@ defmodule Sequence.Server do
 
   ###
   # GenServer Implementation
-
-  def handle_call(:next_number, _from, current_number) do
-    { :reply, current_number, current_number+1 }
+  def init(stash_pid) do
+    initial_stack = Stack.Stash.get_value(stash_pid)
+    { :ok, {initial_stack, stash_pid} }
   end
 
-  def handle_call({:set_number, new_number}, _from, _current_number) do
-    { :reply, new_number, new_number }
+  def handle_call(:next_number, _from, {current_number, stash_pid}) do
+    { :reply, current_number, {current_number+1, stash_pid}}
   end
 
-  def handle_cast({:increment_number, delta}, current_number) do
-    { :noreply, current_number + delta}
+  def handle_cast({:increment_number, delta}, {stack, stash_pid}) do
+    { :noreply, {stack ++ delta, stash_pid} }
+  end
+
+  def terminate(_reason, {stack, stash_pid}) do
+      Stack.Stash.save_value stash_pid, stack
   end
 
 end
